@@ -9,7 +9,7 @@ You will need to engage Microsoft support in order whitelist your tenant for a s
 
 # How to run  
 
-Download the 3 PS1 files to the same folder and run: 
+Download the  PS1 file and open powershell as an admin
 ``` powershell
 .\TeamsExportChatTool.ps1
 ```

@@ -142,7 +142,7 @@ if ( $Sessions.ComputerName -notcontains "outlook.office365.com" ) {
                         Write-Host "________________________"
                         Write-Host -foregroundcolor green "Success"
                         Write-Host "________________________"
-                        Write-Host "go to https://protection.office.com/#/contentsearch and export your PST"
+                        Write-Host "go to https://protection.office.com/contentsearchbeta?ContentOnly=1  and export your PST"
                         write-host
                         write-host
                         Read-Host "Press Enter to get back to the menu..."
@@ -280,7 +280,7 @@ if ( $Sessions.ComputerName -notcontains "outlook.office365.com" ) {
                         Write-Host "________________________"
                         Write-Host -foregroundcolor green "Success"
                         Write-Host "________________________"
-                        Write-Host "go to https://protection.office.com/#/contentsearch and export your PST"
+                        Write-Host "go to https://protection.office.com/contentsearchbeta?ContentOnly=1 and export your PST"
                         write-host
                         write-host
                         Read-Host "Press Enter to get back to the menu..."
@@ -384,7 +384,7 @@ if ( $Sessions.ComputerName -notcontains "outlook.office365.com" ) {
                         Write-Host "________________________"
                         Write-Host -foregroundcolor green "Success"
                         Write-Host "________________________"
-                        Write-Host "go to https://protection.office.com/#/contentsearch and export your PST"
+                        Write-Host "go to https://protection.office.com/contentsearchbeta?ContentOnly=1 and export your PST"
                         write-host
                         write-host
                         Read-Host "Press Enter to get back to the menu..."

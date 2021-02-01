@@ -12,6 +12,15 @@
 # PowerShell Functions
 #------------------------------------------------------------------------------
 
+if( -not $UserCredential ){
+    write-host "[$((Get-Date).ToString("HH:mm:ss"))] Enter tenant admin credentials:"
+    $UserCredential = Get-Credential -Message "Please specify O365 Global Admin Credentials"
+}
+write-host -ForegroundColor Red  "If you have never run this tool before Please verify if your admin has the following permissions:" 
+Write-host -ForegroundColor Red "Go to https://protection.office.com/permissions"
+Write-host -ForegroundColor Red "Add your admin account into the Ediscovery Manager and Compliance Administrator Permissions"
+write-host -ForegroundColor Red "After adding your admin into those permissions wait 30 to 40 minutes to be effective"
+
 $Loop = $true
 While ($Loop)
 {
@@ -23,13 +32,14 @@ write-host
                 write-host -ForegroundColor white  '----------------------------------------------------------------------------------------------' 
     write-host -ForegroundColor white  -BackgroundColor Green   'Please select your option           ' 
     write-host -ForegroundColor white '----------------------------------------------------------------------------------------------' 
-    write-host                                              ' 1)  Export teams chat data from a user mailbox  hosted online  or A Team'
+    write-host                                              ' 1)  Export teams chat data from a user mailbox  hosted online'
                 write-host                                              ' 2)  Export teams chat data from a user hosted onprem  '
+                write-host                                              ' 3)  Export teams chat data from a Team  '
     write-host
     write-host -ForegroundColor white  '----------------------------------------------------------------------------------------------' 
     write-host -ForegroundColor white  -BackgroundColor Red 'End of PowerShell - Script menu ' 
     write-host -ForegroundColor  white  '----------------------------------------------------------------------------------------------' 
-    write-host -ForegroundColor Yellow            "3)  Exit the PowerShell script menu" 
+    write-host -ForegroundColor Yellow            "4)  Exit the PowerShell script menu" 
     write-host
     $opt = Read-Host "Select an option [1-3]"
     write-host $opt
@@ -43,17 +53,31 @@ write-host
            
             ####Getting powershell sessions ########
              $Sessions = Get-PSSession
-              
+             #region Connecting to SCC
+write-host "[$((Get-Date).ToString("HH:mm:ss"))] Connecting to Security & Compliance Center if not already connected..." -foregroundColor Green
+if ( -not ($Sessions.ComputerName -match "ps.compliance.protection.outlook.com") ) {
+    write-host
+    if ( !(Get-Module ExchangeOnlineManagement -ListAvailable) -and !(Get-Module ExchangeOnlineManagement) ) {
+        Install-Module ExchangeOnlineManagement -Force -ErrorAction Stop
+    }
+    Import-Module ExchangeOnlineManagement
+    Connect-IPPSSession -Credential $UserCredential
+}
+#endregion
 
-            #region Connecting to Exchange Online
-            if ( $Sessions.ComputerName -notcontains "outlook.office365.com" )
-             {
-             write-host -
-            write-host "[$((Get-Date).ToString("HH:mm:ss"))] Connecting to Exchange Online..." -foregroundColor Green
-             Connect-ExchangeOnline -Credential $UserCredential -ShowBanner:$false
-            }
-            #endregion
+#region Connecting to Exchange Online
+write-host "[$((Get-Date).ToString("HH:mm:ss"))] Connecting to Exchange Online if not already connected..." -foregroundColor Green
+if ( $Sessions.ComputerName -notcontains "outlook.office365.com" ) {
+    write-host -
+    Connect-ExchangeOnline -Credential $UserCredential -ShowBanner:$False
+}
+#endregion
 
+            
+
+                
+
+           
 
          ##### Online mailbox validation also works for O365 groups#####
                 do{ 
@@ -61,14 +85,14 @@ write-host
                     $emailAddress = $email
 
                 $userMailbox=get-mailbox -identity $email  -ErrorAction SilentlyContinue
-                $GroupMailbox= Get-unifiedGroup -Identity $email -ErrorAction SilentlyContinue
-                    if(($userMailbox -eq $null) -and ($GroupMailbox -eq $null))
+          
+                    if(($userMailbox -eq $null))
                     {
                     write-host "Error:Please enter a valid online mailbox" -ForegroundColor red 
 
                      }
 
-                } while(($userMailbox -eq $null) -and ($GroupMailbox -eq $null))
+                } while(($userMailbox -eq $null))
 
                     #### saving searched user displayname
                     $DisplayName= $userMailbox.DisplayName 
@@ -76,18 +100,7 @@ write-host
                 write-host "Performing Search on $DisplayName Teams chat history"
                     ##Starting search from user
                 $searchName = ((Get-Date).ToString("HH:mm:ss")) + $DisplayName
-                  #region Connecting to SCC
-                if ( -not ($Sessions.ComputerName -match "ps.compliance.protection.outlook.com") )
-                 {
-                 write-host
-                write-host "[$((Get-Date).ToString("HH:mm:ss"))] Connecting to Security & Compliance Center..." -foregroundColor Green
-                if ( !(Get-Module ExchangeOnlineManagement -ListAvailable) -and !(Get-Module ExchangeOnlineManagement) ) {
-                Install-Module ExchangeOnlineManagement -Force -ErrorAction Stop
-                }
-                Import-Module ExchangeOnlineManagement
-                Connect-IPPSSession -Credential $UserCredential
-                }
-                #endregion
+                
              $complianceSearch = New-ComplianceSearch -Name $searchName -ContentMatchQuery "kind:microsoftteams AND kind:im" -ExchangeLocation $emailAddress
             Start-ComplianceSearch $searchName
                 write-host "A Search from Teams chat history has started with the Seacrh Name" $searchName
@@ -135,8 +148,8 @@ write-host
                         Read-Host "Press Enter to get back to the menu..."
                         write-host
                         write-host
-                        }
-
+                        
+        }
         }
     
 
@@ -158,14 +171,29 @@ write-host
 
            
 
-            #region Connecting to Exchange Online
-            if ( $Sessions.ComputerName -notcontains "outlook.office365.com" )
-             {
-             write-host -
-            write-host "[$((Get-Date).ToString("HH:mm:ss"))] Connecting to Exchange Online..." -foregroundColor Green
-             Connect-ExchangeOnline -Credential $UserCredential -ShowBanner:$False
-            }
-            #endregion
+             ####Getting powershell sessions ########
+             $Sessions = Get-PSSession
+             #region Connecting to SCC
+write-host "[$((Get-Date).ToString("HH:mm:ss"))] Connecting to Security & Compliance Center if not already connected..." -foregroundColor Green
+if ( -not ($Sessions.ComputerName -match "ps.compliance.protection.outlook.com") ) {
+    write-host
+    if ( !(Get-Module ExchangeOnlineManagement -ListAvailable) -and !(Get-Module ExchangeOnlineManagement) ) {
+        Install-Module ExchangeOnlineManagement -Force -ErrorAction Stop
+    }
+    Import-Module ExchangeOnlineManagement
+    Connect-IPPSSession -Credential $UserCredential
+}
+#endregion
+
+#region Connecting to Exchange Online
+write-host "[$((Get-Date).ToString("HH:mm:ss"))] Connecting to Exchange Online if not already connected..." -foregroundColor Green
+if ( $Sessions.ComputerName -notcontains "outlook.office365.com" ) {
+    write-host -
+    Connect-ExchangeOnline -Credential $UserCredential -ShowBanner:$False
+}
+#endregion
+
+
                 do{
                 $UserPrincipalName = Read-Host "Enter User Principal Name (UPN)"
                     
@@ -209,20 +237,8 @@ write-host
                  ##Starting search from user
                  $DisplayName = (Get-Recipient -identity $UserPrincipalName).Name
                 $searchName = ((Get-Date).ToString("HH:mm:ss")) + $DisplayName
-                 ####Getting powershell sessions ########
-             $Sessions = Get-PSSession
-                #region Connecting to SCC
-                if ( -not ($Sessions.ComputerName -match "ps.compliance.protection.outlook.com") )
-                 {
-                 write-host
-                write-host "[$((Get-Date).ToString("HH:mm:ss"))] Connecting to Security & Compliance Center..." -foregroundColor Green
-                if ( !(Get-Module ExchangeOnlineManagement -ListAvailable) -and !(Get-Module ExchangeOnlineManagement) ) {
-                Install-Module ExchangeOnlineManagement -Force -ErrorAction Stop
-                }
-                Import-Module ExchangeOnlineManagement
-                Connect-IPPSSession -Credential $UserCredential
-                }
-                #endregion
+                
+                
             $complianceSearch = New-ComplianceSearch "Redstone_Search" -ContentMatchQuery "kind:im" -ExchangeLocation $PrimarySmtp -IncludeUserAppContent $true -AllowNotFoundExchangeLocationsEnabled $true
              Start-ComplianceSearch $searchName
                 write-host "A Search from Teams chat history has started with the Seacrh Name" $searchName
@@ -272,15 +288,117 @@ write-host
                         write-host
                         }
            
+           }
+               
 
-         }       
+        3   
+        {  
+           
+            ####Getting powershell sessions ########
+             $Sessions = Get-PSSession
+             #region Connecting to SCC
+write-host "[$((Get-Date).ToString("HH:mm:ss"))] Connecting to Security & Compliance Center if not already connected..." -foregroundColor Green
+if ( -not ($Sessions.ComputerName -match "ps.compliance.protection.outlook.com") ) {
+    write-host
+    if ( !(Get-Module ExchangeOnlineManagement -ListAvailable) -and !(Get-Module ExchangeOnlineManagement) ) {
+        Install-Module ExchangeOnlineManagement -Force -ErrorAction Stop
+    }
+    Import-Module ExchangeOnlineManagement
+    Connect-IPPSSession -Credential $UserCredential
+}
+#endregion
 
-           3
+#region Connecting to Exchange Online
+write-host "[$((Get-Date).ToString("HH:mm:ss"))] Connecting to Exchange Online if not already connected..." -foregroundColor Green
+if ( $Sessions.ComputerName -notcontains "outlook.office365.com" ) {
+    write-host -
+    Connect-ExchangeOnline -Credential $UserCredential -ShowBanner:$False
+}
+#endregion
+
+
+                
+
+           
+
+         ##### Online mailbox validation also works for O365 groups#####
+                do{ 
+                    $email = Read-Host "Enter an email address"
+                    $emailAddress = $email
+
+                $userMailbox=get-unifiedgroup -identity $email  -ErrorAction SilentlyContinue
+          
+                    if(($userMailbox -eq $null))
+                    {
+                    write-host "Error:Please enter a valid Group(team) Email adress" -ForegroundColor red 
+
+                     }
+
+                } while(($userMailbox -eq $null))
+
+                    #### saving searched user displayname
+                    $DisplayName= $userMailbox.DisplayName 
+
+                write-host "Performing Search on $DisplayName Teams chat history"
+                    ##Starting search from user
+                $searchName = ((Get-Date).ToString("HH:mm:ss")) + $DisplayName
+                
+             $complianceSearch = New-ComplianceSearch -Name $searchName -ContentMatchQuery "kind:microsoftteams AND kind:im" -ExchangeLocation $emailAddress
+            Start-ComplianceSearch $searchName
+                write-host "A Search from Teams chat history has started with the Seacrh Name" $searchName
+                    ## loop until search completes
+
+                     do{
+                    Write-host "Waiting for search to complete..."
+                     Start-Sleep -s 5
+                     $complianceSearch = Get-ComplianceSearch $searchName
+                     }while ($complianceSearch.Status -ne 'Completed')
+
+
+                    if ($complianceSearch.Items -gt 0)
+                    {
+                        # Create a Complinace Search Action and wait for it to complete. The folders will be listed in the .Results parameter
+                        $complianceSearchAction = New-ComplianceSearchaction -SearchName $searchName -Preview
+                        do
+                        {
+                            Write-host "Waiting for search action to complete..."
+                            Start-Sleep -s 5
+                            $complianceSearchAction = Get-ComplianceSearchAction $searchActionName
+                        }while ($complianceSearchAction.Status -ne 'Completed')
+                        
+                        
+                        $results = Get-ComplianceSearch -Identity $searchName |select successresults
+                        $results= $results -replace "@{SuccessResults={", "" -replace "}}",""
+                        $results -match "size:","(\d+)"
+                        $match= $matches[1]
+                        $matchmb= $match/1Mb 
+                        $matchGb= $match/1Gb 
+                        Write-Host "------------------------"
+                        Write-Host "Results"
+                        Write-Host "------------------------"
+                        Write-Host "$results"
+                        Write-Host "------------------------"
+                        Write-Host "Found Size"
+                        Write-Host "$matchmb","Mb"
+                        Write-Host "$matchGb","Gb"
+                        Write-Host "________________________"
+                        Write-Host -foregroundcolor green "Success"
+                        Write-Host "________________________"
+                        Write-Host "go to https://protection.office.com/#/contentsearch and export your PST"
+                        write-host
+                        write-host
+                        Read-Host "Press Enter to get back to the menu..."
+                        write-host
+                        write-host
+                        }
+        }
+        
+   4
         {
 
 $Loop = $true
 Exit
-}  
+} 
         }
        
 }

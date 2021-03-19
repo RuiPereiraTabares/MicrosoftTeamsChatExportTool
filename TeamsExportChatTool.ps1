@@ -33,7 +33,7 @@ write-host
     write-host -ForegroundColor white  -BackgroundColor Green   'Please select your option           ' 
     write-host -ForegroundColor white '----------------------------------------------------------------------------------------------' 
     write-host                                              ' 1)  Export teams chat data from a user mailbox  hosted online'
-                write-host                                              ' 2)  Export teams chat data from a user hosted onprem  '
+                write-host                                              ' 2)  Export teams chat data from a user mailbox hosted onprem  '
                 write-host                                              ' 3)  Export teams chat data from a Team  '
     write-host
     write-host -ForegroundColor white  '----------------------------------------------------------------------------------------------' 
@@ -81,7 +81,7 @@ if ( $Sessions.ComputerName -notcontains "outlook.office365.com" ) {
 
          ##### Online mailbox validation also works for O365 groups#####
                 do{ 
-                    $email = Read-Host "Enter an email address"
+                    $email = Read-Host "Enter an email address (Note: for groups you can obtain this from https://admin.microsoft.com/Adminportal/Home?source=applauncher#/groups)"
                     $emailAddress = $email
 
                 $userMailbox=get-mailbox -identity $email  -ErrorAction SilentlyContinue

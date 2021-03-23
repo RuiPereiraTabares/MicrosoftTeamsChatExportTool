@@ -142,13 +142,33 @@ if ( $Sessions.ComputerName -notcontains "outlook.office365.com" ) {
                         Write-Host "________________________"
                         Write-Host -foregroundcolor green "Success"
                         Write-Host "________________________"
-                        Write-Host "go to https://protection.office.com/contentsearchbeta?ContentOnly=1  and export your PST"
-                        write-host
-                        write-host
-                        Read-Host "Press Enter to get back to the menu..."
-                        write-host
-                        write-host
-                        
+                        Write-Host 
+                        Write-Host "Step 1: Go to Office 365 Security & Compliance->Searches"
+
+    
+Write-Host "Step 2: Check the search with name"
+
+    
+Write-Host "Step 3: Verify that you can view chat messages exported by clicking View Results"
+
+    
+Write-Host "Step 4: Click "Export results", use the default options and click Export"
+
+    
+Write-Host "Step 5: Now goto Office 365 Security & Compliance->Exports and click Refresh"
+
+    
+Write-Host "Step 6: Click the export with name"
+  
+Write-Host "Step 7:  Copy the Export Key and then click Download results and paste the Export key and specify the location where you want to download the exported chat messages."
+
+    
+Write-Host "Step 8: Click Start"
+
+    
+Write-Host "Step 9: When you see message download completed successfully then click on the link under Export location: to get to the exported files. Here you will find the exported PST of chat messages under Exchange folder <user or group email>.pst"
+
+Write-Host " Step 10: Open Outlook application on your Windows PC and click File>Open&Export>Open Outlook data file (.pst) and provide location of the PST file from Step 9. In Outlook you will need to located the folder <user or group email> and under that TeamsMessagesData. You will see all the chat messages exported here now."
         }
         }
     
@@ -280,12 +300,32 @@ if ( $Sessions.ComputerName -notcontains "outlook.office365.com" ) {
                         Write-Host "________________________"
                         Write-Host -foregroundcolor green "Success"
                         Write-Host "________________________"
-                        Write-Host "go to https://protection.office.com/contentsearchbeta?ContentOnly=1 and export your PST"
-                        write-host
-                        write-host
-                        Read-Host "Press Enter to get back to the menu..."
-                        write-host
-                        write-host
+                       Write-Host "Step 1: Go to Office 365 Security & Compliance->Searches"
+
+    
+Write-Host "Step 2: Check the search with name"
+
+    
+Write-Host "Step 3: Verify that you can view chat messages exported by clicking View Results"
+
+    
+Write-Host "Step 4: Click "Export results", use the default options and click Export"
+
+    
+Write-Host "Step 5: Now goto Office 365 Security & Compliance->Exports and click Refresh"
+
+    
+Write-Host "Step 6: Click the export with name"
+  
+Write-Host "Step 7:  Copy the Export Key and then click Download results and paste the Export key and specify the location where you want to download the exported chat messages."
+
+    
+Write-Host "Step 8: Click Start"
+
+    
+Write-Host "Step 9: When you see message download completed successfully then click on the link under Export location: to get to the exported files. Here you will find the exported PST of chat messages under Exchange folder <user or group email>.pst"
+
+Write-Host " Step 10: Open Outlook application on your Windows PC and click File>Open&Export>Open Outlook data file (.pst) and provide location of the PST file from Step 9. In Outlook you will need to located the folder <user or group email> and under that TeamsMessagesData. You will see all the chat messages exported here now."
                         }
            
            }
@@ -384,12 +424,32 @@ if ( $Sessions.ComputerName -notcontains "outlook.office365.com" ) {
                         Write-Host "________________________"
                         Write-Host -foregroundcolor green "Success"
                         Write-Host "________________________"
-                        Write-Host "go to https://protection.office.com/contentsearchbeta?ContentOnly=1 and export your PST"
-                        write-host
-                        write-host
-                        Read-Host "Press Enter to get back to the menu..."
-                        write-host
-                        write-host
+                      Write-Host "Step 1: Go to Office 365 Security & Compliance->Searches"
+
+    
+Write-Host "Step 2: Check the search with name"
+
+    
+Write-Host "Step 3: Verify that you can view chat messages exported by clicking View Results"
+
+    
+Write-Host "Step 4: Click "Export results", use the default options and click Export"
+
+    
+Write-Host "Step 5: Now goto Office 365 Security & Compliance->Exports and click Refresh"
+
+    
+Write-Host "Step 6: Click the export with name"
+  
+Write-Host "Step 7:  Copy the Export Key and then click Download results and paste the Export key and specify the location where you want to download the exported chat messages."
+
+    
+Write-Host "Step 8: Click Start"
+
+    
+Write-Host "Step 9: When you see message download completed successfully then click on the link under Export location: to get to the exported files. Here you will find the exported PST of chat messages under Exchange folder <user or group email>.pst"
+
+Write-Host " Step 10: Open Outlook application on your Windows PC and click File>Open&Export>Open Outlook data file (.pst) and provide location of the PST file from Step 9. In Outlook you will need to located the folder <user or group email> and under that TeamsMessagesData. You will see all the chat messages exported here now."
                         }
         }
         
